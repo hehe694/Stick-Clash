@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Stickman Clash - By Cheng xiu / Cheese Guy🧀 and partially by Aiden</title>
+  <title>Stickman Clash - By Cheng xiu / Cheese Guy and Aiden 🧀</title>
   <style>
     * {
       box-sizing: border-box;
@@ -228,7 +228,7 @@
   <div class="top-bar">
     <div>
       <h1>⚔️ STICKMAN CLASH</h1>
-      <div class="creator-credit">By Cheng xiu / Cheese Guy 🧀</div>
+      <div class="creator-credit">By Cheng xiu / Cheese Guy and Aiden 🧀</div>
     </div>
     <button class="btn btn-shop" id="btnShop">🛒 SHOP</button>
   </div>
@@ -275,7 +275,7 @@
           <div style="font-weight: bold; font-size: 15px;">⚡ Attack Speed</div>
           <div id="spdLevel" style="font-size: 12px; color: #aaa;">Lvl 1</div>
         </div>
-        <button class="btn-buy" id="btnBuySpd" style="width: auto; padding: 8px 16px;">Buy $35</button>
+        <button class="btn-buy" id="btnBuySpd" style="width: auto; padding: 8px 16px;">Buy $100</button>
       </div>
 
       <!-- 💰 COIN MULTIPLIER UPGRADE -->
@@ -284,7 +284,7 @@
           <div style="font-weight: bold; font-size: 15px;">💰 Coin Multiplier</div>
           <div id="coinMultLevel" style="font-size: 12px; color: #aaa;">Lvl 1 (1.0x)</div>
         </div>
-        <button class="btn-buy" id="btnBuyCoinMult" style="width: auto; padding: 8px 16px; background: #e1b12c; border-color: #fbc531;">Buy $40</button>
+        <button class="btn-buy" id="btnBuyCoinMult" style="width: auto; padding: 8px 16px; background: #e1b12c; border-color: #fbc531;">Buy $150</button>
       </div>
 
       <button class="btn btn-close-shop" id="btnCloseShop">❌ BACK TO BATTLE</button>
@@ -311,36 +311,36 @@
     const ctx = canvas.getContext("2d");
 
     let wave = 1;
-    let waveMaxHpBonus = 0; // 📈 Tracks +5 Max HP gained per round win
+    let waveMaxHpBonus = 0; 
     let coins = 0;
     let isShopOpen = false;
 
     // 🗡️ WEAPONS LIST
     const weaponList = [
       { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 10, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
-      { id: 1, name: "🗡️ Iron Sword", cost: 60, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
-      { id: 2, name: "⚔️ Golden Katana", cost: 150, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
-      { id: 3, name: "💎 Diamond Dagger", cost: 350, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
-      { id: 4, name: "🔥 Flame Greatsword", cost: 700, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
-      { id: 5, name: "⚡ Thunder Hammer", cost: 1200, dmg: 160, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
-      { id: 6, name: "🌌 Void Blade", cost: 2000, dmg: 240, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
-      { id: 7, name: "🤖 Cyber Scythe", cost: 3000, dmg: 350, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
-      { id: 8, name: "🐉 Dragon Slayer", cost: 4000, dmg: 500, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
-      { id: 9, name: "🗿 SIGMA BUSTER", cost: 5000, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
+      { id: 1, name: "🗡️ Iron Sword", cost: 150, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
+      { id: 2, name: "⚔️ Golden Katana", cost: 600, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
+      { id: 3, name: "💎 Diamond Dagger", cost: 2000, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
+      { id: 4, name: "🔥 Flame Greatsword", cost: 5000, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
+      { id: 5, name: "⚡ Thunder Hammer", cost: 12000, dmg: 160, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
+      { id: 6, name: "🌌 Void Blade", cost: 25000, dmg: 240, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
+      { id: 7, name: "🤖 Cyber Scythe", cost: 45000, dmg: 350, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
+      { id: 8, name: "🐉 Dragon Slayer", cost: 70000, dmg: 500, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
+      { id: 9, name: "🗿 SIGMA BUSTER", cost: 100000, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
     ];
 
     // ✨ ABILITIES
     const abilityList = [
       { id: 0, name: "💥 Dash Strike", cost: 0, cd: 180, desc: "Dash forward & hit for +25 Dmg" },
-      { id: 1, name: "🩹 Heal Potion", cost: 50, cd: 300, desc: "Restores +40 HP instantly" },
-      { id: 2, name: "🛡️ Iron Shield", cost: 120, cd: 360, desc: "Invincible for 3 seconds" },
-      { id: 3, name: "🔥 Fireball Blast", cost: 250, cd: 240, desc: "Ranged Fireball deals 70 Dmg" },
-      { id: 4, name: "⚡ Lightning Bolt", cost: 500, cd: 270, desc: "Smites enemy for 120 Dmg" },
-      { id: 5, name: "❄️ Frost Freeze", cost: 800, cd: 300, desc: "Freezes bot 3s + 50 Dmg" },
-      { id: 6, name: "🌪️ Wind Blast", cost: 1200, cd: 240, desc: "Knocks back enemy + 150 Dmg" },
-      { id: 7, name: "🧛 Vampire Drain", cost: 2000, cd: 300, desc: "Steals 80 HP from enemy" },
-      { id: 8, name: "💣 Mega Nuke", cost: 3500, cd: 450, desc: "Screen explosion dealing 350 Dmg" },
-      { id: 9, name: "🌟 SIGMA BEAM", cost: 5000, cd: 360, desc: "Giant Laser Beam dealing 700 Dmg" }
+      { id: 1, name: "🩹 Heal Potion", cost: 200, cd: 300, desc: "Restores +40 HP instantly" },
+      { id: 2, name: "🛡️ Iron Shield", cost: 750, cd: 360, desc: "Invincible for 3 seconds" },
+      { id: 3, name: "🔥 Fireball Blast", cost: 2500, cd: 240, desc: "Ranged Fireball deals 70 Dmg" },
+      { id: 4, name: "⚡ Lightning Bolt", cost: 6000, cd: 270, desc: "Smites enemy for 120 Dmg" },
+      { id: 5, name: "❄️ Frost Freeze", cost: 14000, cd: 300, desc: "Freezes bot 3s + 50 Dmg" },
+      { id: 6, name: "🌪️ Wind Blast", cost: 28000, cd: 240, desc: "Knocks back enemy + 150 Dmg" },
+      { id: 7, name: "🧛 Vampire Drain", cost: 50000, cd: 300, desc: "Steals 80 HP from enemy" },
+      { id: 8, name: "💣 Mega Nuke", cost: 75000, cd: 450, desc: "Screen explosion dealing 350 Dmg" },
+      { id: 9, name: "🌟 SIGMA BEAM", cost: 100000, cd: 360, desc: "Giant Laser Beam dealing 700 Dmg" }
     ];
 
     let unlockedWeapons = [0];
@@ -351,10 +351,10 @@
     let abilityCooldownTimer = 0;
 
     let speedLevel = 1;
-    let speedCost = 35;
+    let speedCost = 100;
     
     let coinMultLevel = 1;
-    let coinMultCost = 40;
+    let coinMultCost = 150;
 
     let regenTimer = 0;
     const gravity = 0.6;
@@ -367,9 +367,9 @@
     };
 
     let enemy = { 
-      x: 650, y: 280, vy: 0, hp: 30, maxHp: 30, color: '#ff4757', 
-      attacking: false, attackCooldown: 0, maxCooldown: 28, 
-      speed: 1.6, damage: 5, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
+      x: 650, y: 280, vy: 0, hp: 35, maxHp: 35, color: '#ff4757', 
+      attacking: false, attackCooldown: 0, maxCooldown: 20, 
+      speed: 2.0, damage: 8, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
     };
     
     let moveLeft = false;
@@ -396,30 +396,26 @@
       abilitySelect.appendChild(opt);
     });
 
-    // ❤️ GUARANTEED FULL HEAL SYSTEM
-    function recalculatePlayerStats(healToMax = false) {
+    function recalculatePlayerStats() {
       let currentWeapon = weaponList[currentWeaponIndex];
       let bonusHp = 0;
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
       player.maxHp = 100 + bonusHp + waveMaxHpBonus;
-      
-      // If healToMax is requested or hp exceeds max, set hp directly to maxHp
-      if (healToMax || player.hp > player.maxHp) {
-        player.hp = player.maxHp;
-      }
+      if (player.hp > player.maxHp) player.hp = player.maxHp;
     }
 
     function spawnNextEnemy() {
       enemy.x = 720;
       enemy.y = 280;
       enemy.vy = 0;
-      enemy.maxHp = 25 + (wave * 10);
+      enemy.maxHp = 35 + (wave * 17);
       enemy.hp = enemy.maxHp;
-      enemy.speed = Math.min(1.6 + (wave * 0.15), 3.8); 
-      enemy.maxCooldown = Math.max(30 - wave, 14); 
-      enemy.damage = 5 + Math.floor(wave * 1.8); 
+      enemy.speed = Math.min(2.0 + (wave * 0.2), 4.2); 
+      // 🐌 ADJUSTED: Enemy attacks 2 frames slower (+2 to attack cooldown)
+      enemy.maxCooldown = Math.max(22 - wave, 10); 
+      enemy.damage = 8 + Math.floor(wave * 2.2); 
       enemy.facingRight = false;
       enemy.freezeTimer = 0;
       enemy.slowTimer = 0;
@@ -475,8 +471,8 @@
         btnBuyW.innerText = "EQUIP WEAPON";
         btnBuyW.disabled = false;
       } else {
-        document.getElementById('weaponCost').innerText = "Cost: $" + selectedWeapon.cost;
-        btnBuyW.innerText = "BUY WEAPON ($" + selectedWeapon.cost + ")";
+        document.getElementById('weaponCost').innerText = "Cost: $" + selectedWeapon.cost.toLocaleString();
+        btnBuyW.innerText = "BUY WEAPON ($" + selectedWeapon.cost.toLocaleString() + ")";
         btnBuyW.disabled = (coins < selectedWeapon.cost);
       }
 
@@ -497,8 +493,8 @@
         btnBuyA.innerText = "EQUIP ABILITY";
         btnBuyA.disabled = false;
       } else {
-        document.getElementById('abilityCost').innerText = "Cost: $" + selectedAbility.cost;
-        btnBuyA.innerText = "BUY ABILITY ($" + selectedAbility.cost + ")";
+        document.getElementById('abilityCost').innerText = "Cost: $" + selectedAbility.cost.toLocaleString();
+        btnBuyA.innerText = "BUY ABILITY ($" + selectedAbility.cost.toLocaleString() + ")";
         btnBuyA.disabled = (coins < selectedAbility.cost);
       }
 
@@ -508,12 +504,12 @@
         document.getElementById('btnBuySpd').disabled = true;
       } else {
         document.getElementById('spdLevel').innerText = "Lvl " + speedLevel;
-        document.getElementById('btnBuySpd').innerText = "Buy $" + speedCost;
+        document.getElementById('btnBuySpd').innerText = "Buy $" + speedCost.toLocaleString();
         document.getElementById('btnBuySpd').disabled = (coins < speedCost);
       }
 
       document.getElementById('coinMultLevel').innerText = "Lvl " + coinMultLevel + " (" + coinMultLevel + ".0x Multiplier)";
-      document.getElementById('btnBuyCoinMult').innerText = "Buy $" + coinMultCost;
+      document.getElementById('btnBuyCoinMult').innerText = "Buy $" + coinMultCost.toLocaleString();
       document.getElementById('btnBuyCoinMult').disabled = (coins < coinMultCost);
     }
 
@@ -530,7 +526,7 @@
         unlockedWeapons.push(idx);
         currentWeaponIndex = idx;
       }
-      recalculatePlayerStats(true); // Heal when equipping weapon!
+      recalculatePlayerStats();
       updateShopUI();
     });
 
@@ -565,7 +561,7 @@
         coins -= speedCost;
         player.maxCooldown--;
         speedLevel++;
-        speedCost = Math.floor(speedCost * 2.2);
+        speedCost = Math.floor(speedCost * 2.8);
         updateShopUI();
       }
     });
@@ -574,7 +570,7 @@
       if (coins >= coinMultCost) {
         coins -= coinMultCost;
         coinMultLevel++;
-        coinMultCost = Math.floor(coinMultCost * 2.0);
+        coinMultCost = Math.floor(coinMultCost * 2.5);
         updateShopUI();
       }
     });
@@ -658,7 +654,7 @@
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
-        let baseCash = 15 + (wave * 8);
+        let baseCash = 5 + (wave * 3);
         let weaponMult = weaponList[currentWeaponIndex].mult;
         let totalCashMult = weaponMult * coinMultLevel;
         let cashEarned = Math.floor(baseCash * totalCashMult);
@@ -667,13 +663,13 @@
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
-        waveMaxHpBonus += 5; // 📈 Add +5 Max HP per round won!
+        waveMaxHpBonus += 5;
 
-        // ❤️ FULL HEAL & MAX HP INCREASE!
-        recalculatePlayerStats(true);
+        recalculatePlayerStats();
+        player.hp = Math.min(player.maxHp, player.hp + 50);
 
-        hitsEffects.push({ x: player.x, y: player.y - 50, text: "MAX HEAL! ❤️", color: "#2ed573", life: 40 });
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+5 MAX HP & FULL HEAL! ❤️)", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: player.x, y: player.y - 50, text: "+50 HP HEAL! ❤️", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+5 MAX HP & +50 HEAL! ❤️)", color: "#2ed573", life: 40 });
         
         spawnNextEnemy();
       }
@@ -707,7 +703,6 @@
       ctx.lineTo(stick.x, stick.y + 20);
       ctx.stroke();
 
-      // 🚶 WALK ANIMATION LEGS
       let legOffset = Math.sin(stick.walkCycle) * 12;
       ctx.beginPath();
       ctx.moveTo(stick.x, stick.y + 20);
@@ -774,7 +769,6 @@
         ctx.stroke();
 
       } else {
-        // 🚶 WALK ANIMATION ARMS
         const dir = stick.facingRight ? 1 : -1;
         let armOffset = Math.cos(stick.walkCycle) * 8;
         ctx.strokeStyle = stick.color;
@@ -847,7 +841,6 @@
         }
       }
 
-      // Physics & Gravity
       player.vy += gravity;
       player.y += player.vy;
       if (player.y >= 280) {
@@ -1001,7 +994,7 @@
       ctx.fillStyle = "#ffd700";
       ctx.font = "bold 15px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("💰 COINS: $" + coins, 30, 102);
+      ctx.fillText("💰 COINS: $" + coins.toLocaleString(), 30, 102);
       ctx.fillStyle = "#2ed573";
       ctx.fillText("WEAPON: " + weaponList[currentWeaponIndex].name + " (" + weaponList[currentWeaponIndex].mult.toFixed(1) + "x) | COIN MULT: " + coinMultLevel + "x 💸", 30, 120);
       ctx.fillStyle = "#a29bfe";
@@ -1060,14 +1053,15 @@
         ctx.fillStyle = "#ff4757";
         ctx.fillText("GAME OVER! 💀 SURVIVED WAVE " + wave, canvas.width / 2, 170);
         ctx.fillStyle = "#ffd700";
-        ctx.fillText("TOTAL CASH EARNED: $" + coins + " 💰", canvas.width / 2, 210);
+        ctx.fillText("TOTAL CASH EARNED: $" + coins.toLocaleString() + " 💰", canvas.width / 2, 210);
       }
     }
 
     document.getElementById('btnRestart').addEventListener('pointerdown', () => {
       wave = 1;
-      waveMaxHpBonus = 0; // Reset round bonus on restart
-      recalculatePlayerStats(true); // Guaranteed FULL HEAL on restart!
+      waveMaxHpBonus = 0;
+      recalculatePlayerStats();
+      player.hp = player.maxHp;
       player.x = 150;
       player.y = 280;
       player.vy = 0;
@@ -1077,8 +1071,8 @@
       document.getElementById('btnRestart').style.display = 'none';
     });
 
-    // Start with 100% full health!
-    recalculatePlayerStats(true);
+    recalculatePlayerStats();
+    player.hp = player.maxHp;
     spawnNextEnemy();
     function gameLoop() {
       update();
