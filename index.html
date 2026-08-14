@@ -316,7 +316,7 @@
     const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
 
-    // 🗡️ WEAPONS LIST (Balanced Moderate Prices!)
+    // 🗡️ WEAPONS LIST
     const weaponList = [
       { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 10, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
       { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
@@ -330,7 +330,7 @@
       { id: 9, name: "🗿 SIGMA BUSTER", cost: 9500, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
     ];
 
-    // ✨ ABILITIES (Balanced Moderate Prices!)
+    // ✨ ABILITIES
     const abilityList = [
       { id: 0, name: "💥 Dash Strike", cost: 0, cd: 180, desc: "Dash forward & hit for +25 Dmg" },
       { id: 1, name: "🩹 Heal Potion", cost: 150, cd: 300, desc: "Restores +40 HP instantly" },
@@ -370,7 +370,7 @@
     let enemy = { 
       x: 650, y: 280, vy: 0, hp: 25, maxHp: 25, color: '#ff4757', 
       attacking: false, attackCooldown: 0, maxCooldown: 22, 
-      speed: 1.8, damage: 5, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
+      speed: 1.8, damage: 8, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
     };
     
     let moveLeft = false;
@@ -416,7 +416,7 @@
       
       enemy.speed = Math.min(1.8 + (wave * 0.15), 3.8); 
       enemy.maxCooldown = Math.max(22 - wave, 9); 
-      enemy.damage = 5 + Math.floor(wave * 1.5); 
+      enemy.damage = 8 + Math.floor(wave * 1.5); 
       enemy.facingRight = false;
       enemy.freezeTimer = 0;
       enemy.slowTimer = 0;
@@ -655,7 +655,7 @@
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
-        let baseCash = 20 + (wave * 5); // Scaled up to match moderate prices!
+        let baseCash = 20 + (wave * 5); 
         let weaponMult = weaponList[currentWeaponIndex].mult;
         let totalCashMult = weaponMult * coinMultLevel;
         let cashEarned = Math.floor(baseCash * totalCashMult);
