@@ -313,6 +313,7 @@
     let wave = 1;
     let waveMaxHpBonus = 0; 
     let coins = 0;
+    const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
 
     // 🗡️ WEAPONS LIST
@@ -367,9 +368,9 @@
     };
 
     let enemy = { 
-      x: 650, y: 280, vy: 0, hp: 35, maxHp: 35, color: '#ff4757', 
-      attacking: false, attackCooldown: 0, maxCooldown: 20, 
-      speed: 2.0, damage: 8, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
+      x: 650, y: 280, vy: 0, hp: 25, maxHp: 25, color: '#ff4757', 
+      attacking: false, attackCooldown: 0, maxCooldown: 22, 
+      speed: 1.8, damage: 5, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
     };
     
     let moveLeft = false;
@@ -410,12 +411,16 @@
       enemy.x = 720;
       enemy.y = 280;
       enemy.vy = 0;
-      enemy.maxHp = 35 + (wave * 17);
+      enemy.maxHp = 25 + (wave * 12);
       enemy.hp = enemy.maxHp;
-      enemy.speed = Math.min(2.0 + (wave * 0.2), 4.2); 
-      // 🐌 ADJUSTED: Enemy attacks 2 frames slower (+2 to attack cooldown)
-      enemy.maxCooldown = Math.max(22 - wave, 10); 
-      enemy.damage = 8 + Math.floor(wave * 2.2); 
+      
+      // 🏎️ ENEMY MAX SPEED +0.3 MORE (Caps at 3.8 now)
+      enemy.speed = Math.min(1.8 + (wave * 0.15), 3.8); 
+      
+      // ⚔️ REMOVED 3 FRAMES ENEMY ATTACK COOLDOWN (Faster attack rate)
+      enemy.maxCooldown = Math.max(22 - wave, 9); 
+      
+      enemy.damage = 5 + Math.floor(wave * 1.5); 
       enemy.facingRight = false;
       enemy.freezeTimer = 0;
       enemy.slowTimer = 0;
@@ -450,7 +455,7 @@
     const shopModal = document.getElementById('shopModal');
     
     function updateShopUI() {
-      document.getElementById('shopCoins').innerText = "Coins: $" + coins;
+      document.getElementById('shopCoins').innerText = "Coins: $" + coins.toLocaleString();
       
       const selectedWIndex = parseInt(weaponSelect.value);
       const selectedWeapon = weaponList[selectedWIndex];
@@ -654,22 +659,26 @@
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
-        let baseCash = 5 + (wave * 3);
+        // 💰 BASE $10 + $2 BUCKS PER ROUND
+        let baseCash = 10 + (wave * 2); 
         let weaponMult = weaponList[currentWeaponIndex].mult;
         let totalCashMult = weaponMult * coinMultLevel;
         let cashEarned = Math.floor(baseCash * totalCashMult);
         
-        coins += cashEarned;
+        // 🏦 MONEY CAPPED AT $500,000
+        coins = Math.min(MAX_COINS, coins + cashEarned);
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
-        waveMaxHpBonus += 5;
+        waveMaxHpBonus += 8;
 
         recalculatePlayerStats();
-        player.hp = Math.min(player.maxHp, player.hp + 50);
+        
+        // ❤️ HEAL FULL PER ROUND
+        player.hp = player.maxHp; 
 
-        hitsEffects.push({ x: player.x, y: player.y - 50, text: "+50 HP HEAL! ❤️", color: "#2ed573", life: 40 });
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+5 MAX HP & +50 HEAL! ❤️)", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: player.x, y: player.y - 50, text: "FULL HEAL! ❤️", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+8 MAX HP & FULL HEAL! ❤️)", color: "#2ed573", life: 40 });
         
         spawnNextEnemy();
       }
@@ -856,9 +865,10 @@
         enemy.vy = 0;
       }
 
-      let moveSpeed = 6;
-      if (currentWeapon.id === 2) moveSpeed = 7;
-      if (currentWeapon.id === 9) moveSpeed = 8;
+      // 👟 PLAYER SPEED REDUCED BY -0.1 (5.9 base move speed)
+      let moveSpeed = 5.9;
+      if (currentWeapon.id === 2) moveSpeed = 6.9;
+      if (currentWeapon.id === 9) moveSpeed = 7.9;
 
       let isPlayerMoving = false;
       if (moveLeft && player.x > 30) {
@@ -994,7 +1004,7 @@
       ctx.fillStyle = "#ffd700";
       ctx.font = "bold 15px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("💰 COINS: $" + coins.toLocaleString(), 30, 102);
+      ctx.fillText("💰 COINS: $" + coins.toLocaleString() + (coins >= MAX_COINS ? " (MAX)" : ""), 30, 102);
       ctx.fillStyle = "#2ed573";
       ctx.fillText("WEAPON: " + weaponList[currentWeaponIndex].name + " (" + weaponList[currentWeaponIndex].mult.toFixed(1) + "x) | COIN MULT: " + coinMultLevel + "x 💸", 30, 120);
       ctx.fillStyle = "#a29bfe";
