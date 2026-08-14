@@ -319,7 +319,7 @@
     // 🗡️ WEAPONS LIST
     const weaponList = [
       { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 10, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
-      { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
+      { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 incoming damage)" },
       { id: 2, name: "⚔️ Golden Katana", cost: 300, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
       { id: 3, name: "💎 Diamond Dagger", cost: 650, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
       { id: 4, name: "🔥 Flame Greatsword", cost: 1200, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
@@ -368,7 +368,7 @@
     };
 
     let enemy = { 
-      x: 650, y: 280, vy: 0, hp: 25, maxHp: 25, color: '#ff4757', 
+      x: 650, y: 280, vy: 0, hp: 40, maxHp: 40, color: '#ff4757', 
       attacking: false, attackCooldown: 0, maxCooldown: 22, 
       speed: 1.8, damage: 8, facingRight: false, hurtTimer: 0, freezeTimer: 0, slowTimer: 0, walkCycle: 0
     };
@@ -411,7 +411,7 @@
       enemy.x = 720;
       enemy.y = 280;
       enemy.vy = 0;
-      enemy.maxHp = 25 + (wave * 12);
+      enemy.maxHp = Math.floor((40 + (wave * 12)) * (1 + 0.05 * wave));
       enemy.hp = enemy.maxHp;
       
       enemy.speed = Math.min(1.8 + (wave * 0.15), 3.8); 
@@ -953,8 +953,7 @@
 
             if (player.shieldTimer === 0) {
               let takenDmg = enemy.damage;
-              if (currentWeapon.id === 1) takenDmg = Math.max(1, takenDmg - 1);
-
+              if (currentWeapon.id === 1) takenDmg = Math.max(1, takenDmg - 1); // 🛡️ Iron Sword defense ability
               player.hp -= takenDmg;
               player.hurtTimer = 8;
               hitsEffects.push({ x: player.x, y: player.y - 30, text: "-" + takenDmg + " 💥", color: "#ff4757", life: 12 });
