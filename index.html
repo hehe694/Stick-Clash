@@ -275,7 +275,7 @@
           <div style="font-weight: bold; font-size: 15px;">⚡ Attack Speed</div>
           <div id="spdLevel" style="font-size: 12px; color: #aaa;">Lvl 1</div>
         </div>
-        <button class="btn-buy" id="btnBuySpd" style="width: auto; padding: 8px 16px;">Buy $30</button>
+        <button class="btn-buy" id="btnBuySpd" style="width: auto; padding: 8px 16px;">Buy $100</button>
       </div>
 
       <!-- 💰 COIN MULTIPLIER UPGRADE -->
@@ -284,7 +284,7 @@
           <div style="font-weight: bold; font-size: 15px;">💰 Coin Multiplier</div>
           <div id="coinMultLevel" style="font-size: 12px; color: #aaa;">Lvl 1 (1.0x)</div>
         </div>
-        <button class="btn-buy" id="btnBuyCoinMult" style="width: auto; padding: 8px 16px; background: #e1b12c; border-color: #fbc531;">Buy $50</button>
+        <button class="btn-buy" id="btnBuyCoinMult" style="width: auto; padding: 8px 16px; background: #e1b12c; border-color: #fbc531;">Buy $150</button>
       </div>
 
       <button class="btn btn-close-shop" id="btnCloseShop">❌ BACK TO BATTLE</button>
@@ -316,32 +316,32 @@
     const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
 
-    // 🗡️ WEAPONS LIST (OG Cheaper Prices!)
+    // 🗡️ WEAPONS LIST (Balanced Moderate Prices!)
     const weaponList = [
       { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 10, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
-      { id: 1, name: "🗡️ Iron Sword", cost: 40, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
-      { id: 2, name: "⚔️ Golden Katana", cost: 150, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
-      { id: 3, name: "💎 Diamond Dagger", cost: 400, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
-      { id: 4, name: "🔥 Flame Greatsword", cost: 900, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
-      { id: 5, name: "⚡ Thunder Hammer", cost: 1800, dmg: 160, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
-      { id: 6, name: "🌌 Void Blade", cost: 3500, dmg: 240, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
-      { id: 7, name: "🤖 Cyber Scythe", cost: 6000, dmg: 350, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
-      { id: 8, name: "🐉 Dragon Slayer", cost: 10000, dmg: 500, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
-      { id: 9, name: "🗿 SIGMA BUSTER", cost: 15000, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
+      { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 Damage Taken)" },
+      { id: 2, name: "⚔️ Golden Katana", cost: 300, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
+      { id: 3, name: "💎 Diamond Dagger", cost: 650, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
+      { id: 4, name: "🔥 Flame Greatsword", cost: 1200, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
+      { id: 5, name: "⚡ Thunder Hammer", cost: 2000, dmg: 160, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
+      { id: 6, name: "🌌 Void Blade", cost: 3200, dmg: 240, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
+      { id: 7, name: "🤖 Cyber Scythe", cost: 4800, dmg: 350, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
+      { id: 8, name: "🐉 Dragon Slayer", cost: 6800, dmg: 500, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
+      { id: 9, name: "🗿 SIGMA BUSTER", cost: 9500, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
     ];
 
-    // ✨ ABILITIES (OG Cheaper Prices!)
+    // ✨ ABILITIES (Balanced Moderate Prices!)
     const abilityList = [
       { id: 0, name: "💥 Dash Strike", cost: 0, cd: 180, desc: "Dash forward & hit for +25 Dmg" },
-      { id: 1, name: "🩹 Heal Potion", cost: 50, cd: 300, desc: "Restores +40 HP instantly" },
-      { id: 2, name: "🛡️ Iron Shield", cost: 150, cd: 360, desc: "Invincible for 3 seconds" },
-      { id: 3, name: "🔥 Fireball Blast", cost: 400, cd: 240, desc: "Ranged Fireball deals 70 Dmg" },
-      { id: 4, name: "⚡ Lightning Bolt", cost: 900, cd: 270, desc: "Smites enemy for 120 Dmg" },
-      { id: 5, name: "❄️ Frost Freeze", cost: 1800, cd: 300, desc: "Freezes bot 3s + 50 Dmg" },
-      { id: 6, name: "🌪️ Wind Blast", cost: 3500, cd: 240, desc: "Knocks back enemy + 150 Dmg" },
-      { id: 7, name: "🧛 Vampire Drain", cost: 6000, cd: 300, desc: "Steals 80 HP from enemy" },
-      { id: 8, name: "💣 Mega Nuke", cost: 10000, cd: 450, desc: "Screen explosion dealing 350 Dmg" },
-      { id: 9, name: "🌟 SIGMA BEAM", cost: 15000, cd: 360, desc: "Giant Laser Beam dealing 700 Dmg" }
+      { id: 1, name: "🩹 Heal Potion", cost: 150, cd: 300, desc: "Restores +40 HP instantly" },
+      { id: 2, name: "🛡️ Iron Shield", cost: 350, cd: 360, desc: "Invincible for 3 seconds" },
+      { id: 3, name: "🔥 Fireball Blast", cost: 750, cd: 240, desc: "Ranged Fireball deals 70 Dmg" },
+      { id: 4, name: "⚡ Lightning Bolt", cost: 1300, cd: 270, desc: "Smites enemy for 120 Dmg" },
+      { id: 5, name: "❄️ Frost Freeze", cost: 2100, cd: 300, desc: "Freezes bot 3s + 50 Dmg" },
+      { id: 6, name: "🌪️ Wind Blast", cost: 3100, cd: 240, desc: "Knocks back enemy + 150 Dmg" },
+      { id: 7, name: "🧛 Vampire Drain", cost: 4500, cd: 300, desc: "Steals 80 HP from enemy" },
+      { id: 8, name: "💣 Mega Nuke", cost: 6200, cd: 450, desc: "Screen explosion dealing 350 Dmg" },
+      { id: 9, name: "🌟 SIGMA BEAM", cost: 8500, cd: 360, desc: "Giant Laser Beam dealing 700 Dmg" }
     ];
 
     let unlockedWeapons = [0];
@@ -352,10 +352,10 @@
     let abilityCooldownTimer = 0;
 
     let speedLevel = 1;
-    let speedCost = 30;
+    let speedCost = 100;
     
     let coinMultLevel = 1;
-    let coinMultCost = 50;
+    let coinMultCost = 150;
 
     let regenTimer = 0;
     const gravity = 0.6;
@@ -562,7 +562,7 @@
         coins -= speedCost;
         player.maxCooldown--;
         speedLevel++;
-        speedCost = Math.floor(speedCost * 2.2);
+        speedCost = Math.floor(speedCost * 1.8);
         updateShopUI();
       }
     });
@@ -571,7 +571,7 @@
       if (coins >= coinMultCost) {
         coins -= coinMultCost;
         coinMultLevel++;
-        coinMultCost = Math.floor(coinMultCost * 2.2);
+        coinMultCost = Math.floor(coinMultCost * 1.8);
         updateShopUI();
       }
     });
@@ -655,7 +655,7 @@
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
-        let baseCash = 10 + (wave * 2); 
+        let baseCash = 20 + (wave * 5); // Scaled up to match moderate prices!
         let weaponMult = weaponList[currentWeaponIndex].mult;
         let totalCashMult = weaponMult * coinMultLevel;
         let cashEarned = Math.floor(baseCash * totalCashMult);
