@@ -316,18 +316,18 @@
     const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
 
-    // 🗡️ WEAPONS LIST
+    // 🗡️ WEAPONS LIST (Slightly Buffed Damage)
     const weaponList = [
-      { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 10, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
-      { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 20, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 incoming damage)" },
-      { id: 2, name: "⚔️ Golden Katana", cost: 300, dmg: 35, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
-      { id: 3, name: "💎 Diamond Dagger", cost: 650, dmg: 60, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
-      { id: 4, name: "🔥 Flame Greatsword", cost: 1200, dmg: 100, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
-      { id: 5, name: "⚡ Thunder Hammer", cost: 2000, dmg: 160, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
-      { id: 6, name: "🌌 Void Blade", cost: 3200, dmg: 240, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
-      { id: 7, name: "🤖 Cyber Scythe", cost: 4800, dmg: 350, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
-      { id: 8, name: "🐉 Dragon Slayer", cost: 6800, dmg: 500, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
-      { id: 9, name: "🗿 SIGMA BUSTER", cost: 9500, dmg: 750, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
+      { id: 0, name: "🪵 Wooden Club", cost: 0, dmg: 13, color: "#8B4513", mult: 1.0, passive: "Tough Bark (+10 Max HP)" },
+      { id: 1, name: "🗡️ Iron Sword", cost: 100, dmg: 26, color: "#c0c0c0", mult: 1.2, passive: "Iron Defense (-1 incoming damage)" },
+      { id: 2, name: "⚔️ Golden Katana", cost: 300, dmg: 45, color: "#ffd700", mult: 1.5, passive: "Lightweight (+ High Jump & Speed)" },
+      { id: 3, name: "💎 Diamond Dagger", cost: 650, dmg: 75, color: "#00d2ff", mult: 1.8, passive: "Critical Tip (10% Chance 2x Dmg)" },
+      { id: 4, name: "🔥 Flame Greatsword", cost: 1200, dmg: 120, color: "#ff4757", mult: 2.0, passive: "Warmth (Heals +1 HP every 3s)" },
+      { id: 5, name: "⚡ Thunder Hammer", cost: 2000, dmg: 190, color: "#eccc68", mult: 2.3, passive: "Shock (Slows enemy speed on hit)" },
+      { id: 6, name: "🌌 Void Blade", cost: 3200, dmg: 280, color: "#a29bfe", mult: 2.6, passive: "Life Drain (+2 HP per basic hit)" },
+      { id: 7, name: "🤖 Cyber Scythe", cost: 4800, dmg: 400, color: "#2ed573", mult: 2.9, passive: "Overclock (10% Faster Skill CD)" },
+      { id: 8, name: "🐉 Dragon Slayer", cost: 6800, dmg: 580, color: "#ff6b81", mult: 3.2, passive: "Heavy Impact (Knocks back enemy)" },
+      { id: 9, name: "🗿 SIGMA BUSTER", cost: 9500, dmg: 850, color: "#ffffff", mult: 3.5, passive: "Chad Aura (+30 HP & +2 Speed)" }
     ];
 
     // ✨ ABILITIES
