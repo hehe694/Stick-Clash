@@ -343,6 +343,15 @@
         <button class="btn-buy" id="btnBuyAbility" style="background: #8e44ad; border-color: #a29bfe;">Equip Ability</button>
       </div>
 
+      <!-- ❤️ MAX HEALTH SHOP ITEM -->
+      <div class="shop-item" style="flex-direction: row; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-weight: bold; font-size: 15px;">❤️ Max Health</div>
+          <div id="maxHpLevel" style="font-size: 12px; color: #aaa;">Lvl 1 (+0 Max HP)</div>
+        </div>
+        <button class="btn-buy" id="btnBuyMaxHp" style="width: auto; padding: 8px 16px; background: #ff4757; border-color: #ff6b81;">Buy $100</button>
+      </div>
+
       <!-- ⚡ ATTACK SPEED UPGRADE -->
       <div class="shop-item" style="flex-direction: row; align-items: center; justify-content: space-between;">
         <div>
@@ -538,6 +547,9 @@
     let currentAbilityIndex = 0;
     let abilityCooldownTimer = 0;
 
+    let maxHpLevel = 1;
+    let maxHpCost = 100;
+
     let speedLevel = 1;
     let speedCost = 100;
     
@@ -595,13 +607,17 @@
       adminAbilitySelect.appendChild(optAdminA);
     });
 
+    // 🧀 RECALCULATE MAX HEALTH (+6 HP PER WAVE + SHOP UPGRADES)
     function recalculatePlayerStats() {
       let currentWeapon = weaponList[currentWeaponIndex];
       let bonusHp = 0;
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
-      player.maxHp = 100 + bonusHp;
+      let waveBonusHp = (wave - 1) * 6;       // 🧀 +6 Max HP every wave!
+      let shopBonusHp = (maxHpLevel - 1) * 15; // Shop Max HP upgrades
+
+      player.maxHp = 100 + bonusHp + waveBonusHp + shopBonusHp;
       if (player.hp > player.maxHp) {
         player.hp = player.maxHp;
       }
@@ -826,6 +842,11 @@
         btnBuyA.disabled = (coins < selectedAbility.cost);
       }
 
+      // Max HP Shop Upgrade Display
+      document.getElementById('maxHpLevel').innerText = "Lvl " + maxHpLevel + " (+" + ((maxHpLevel - 1) * 15) + " Max HP)";
+      document.getElementById('btnBuyMaxHp').innerText = "Buy $" + maxHpCost.toLocaleString();
+      document.getElementById('btnBuyMaxHp').disabled = (coins < maxHpCost);
+
       if (player.maxCooldown <= 8) {
         document.getElementById('spdLevel').innerText = "MAX SPEED! ⚡";
         document.getElementById('btnBuySpd').innerText = "MAXED";
@@ -886,6 +907,19 @@
       e.preventDefault();
       isShopOpen = false;
       shopModal.style.display = 'none';
+    });
+
+    // 🧀 BUY MAX HP ITEM FROM SHOP
+    document.getElementById('btnBuyMaxHp').addEventListener('pointerdown', () => {
+      if (coins >= maxHpCost) {
+        playBuySound();
+        coins -= maxHpCost;
+        maxHpLevel++;
+        maxHpCost = Math.floor(maxHpCost * 1.8);
+        recalculatePlayerStats();
+        player.hp = Math.min(player.maxHp, player.hp + 15); // Heal the bonus HP instantly
+        updateShopUI();
+      }
     });
 
     document.getElementById('btnBuySpd').addEventListener('pointerdown', () => {
@@ -1008,11 +1042,11 @@
 
         wave++;
         
-        // 🧀 GUARANTEED FULL HEAL EVERY ROUND
+        // 🧀 GUARANTEED FULL HEAL & +6 MAX HP EVERY WAVE!
         recalculatePlayerStats();
         player.hp = player.maxHp;
 
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! FULL HP RESTORED! 🧀✨", color: "#2ed573", life: 50 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! +6 MAX HP & FULL HEAL! 🧀✨", color: "#2ed573", life: 50 });
         
         spawnNextEnemy();
       }
@@ -1410,6 +1444,8 @@
     document.getElementById('btnRestart').addEventListener('pointerdown', () => {
       initAudio();
       wave = 1;
+      maxHpLevel = 1;
+      maxHpCost = 100;
       recalculatePlayerStats();
       player.hp = player.maxHp;
       player.x = 150;
