@@ -381,6 +381,123 @@
   <button class="btn btn-restart" id="btnRestart">🔄 TRY AGAIN</button>
 
   <script>
+    // 🎵 AUDIO SYSTEM (WEB AUDIO API)
+    let audioCtx = null;
+    let bgmInterval = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      startBgm();
+    }
+
+    // Soft, low-volume ambient BGM loop
+    function startBgm() {
+      if (bgmInterval) return;
+      const notes = [220, 261.63, 329.63, 392.00]; // Chill A minor arpeggio
+      let step = 0;
+      
+      bgmInterval = setInterval(() => {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+        
+        // Very quiet volume so it's not too loud
+        gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+        
+        step++;
+      }, 1400);
+    }
+
+    function playJumpSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    }
+
+    function playAttackSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    }
+
+    function playHitSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(110, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function playCoinSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.07);
+      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+
+    function playBuySound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    }
+
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
@@ -511,7 +628,7 @@
 
     function bindHold(btnId, onPress, onRelease) {
       const btn = document.getElementById(btnId);
-      btn.addEventListener('pointerdown', (e) => { e.preventDefault(); onPress(); });
+      btn.addEventListener('pointerdown', (e) => { e.preventDefault(); initAudio(); onPress(); });
       btn.addEventListener('pointerup', (e) => { e.preventDefault(); onRelease(); });
       btn.addEventListener('pointerleave', (e) => { e.preventDefault(); onRelease(); });
     }
@@ -521,16 +638,22 @@
 
     document.getElementById('btnJump').addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      initAudio();
       triggerJump();
     });
 
     document.getElementById('btnAttack').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (!isShopOpen && !isAdminOpen) attackBuffer = 8;
+      initAudio();
+      if (!isShopOpen && !isAdminOpen) {
+        attackBuffer = 8;
+        playAttackSound();
+      }
     });
 
     document.getElementById('btnSkill').addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      initAudio();
       if (!isShopOpen && !isAdminOpen) triggerAbility();
     });
 
@@ -555,6 +678,7 @@
 
     document.getElementById('btnAdmin').addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      initAudio();
       let pwd = prompt("🔐 Enter Admin Password:");
       if (pwd !== null && encryptPassword(pwd) === "Umt0SVNGWklTbGhDTFVSc1oyaHg=") {
         isAdminOpen = true;
@@ -563,6 +687,7 @@
         document.getElementById('adminCoinsInput').value = coins;
         document.getElementById('adminWaveInput').value = wave;
         document.getElementById('adminSpdInput').value = player.maxCooldown;
+        playBuySound();
       } else if (pwd !== null) {
         alert("❌ Incorrect Password! Nice try, hacker! 🧀");
       }
@@ -722,6 +847,7 @@
     abilitySelect.addEventListener('change', updateShopUI);
 
     document.getElementById('btnBuyWeapon').addEventListener('pointerdown', () => {
+      playBuySound();
       const idx = parseInt(weaponSelect.value);
       const w = weaponList[idx];
       if (unlockedWeapons.includes(idx)) {
@@ -736,6 +862,7 @@
     });
 
     document.getElementById('btnBuyAbility').addEventListener('pointerdown', () => {
+      playBuySound();
       const idx = parseInt(abilitySelect.value);
       const a = abilityList[idx];
       if (unlockedAbilities.includes(idx)) {
@@ -750,6 +877,8 @@
 
     document.getElementById('btnShop').addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      initAudio();
+      playBuySound();
       isShopOpen = true;
       updateShopUI();
       shopModal.style.display = 'flex';
@@ -763,6 +892,7 @@
 
     document.getElementById('btnBuySpd').addEventListener('pointerdown', () => {
       if (coins >= speedCost && player.maxCooldown > 8) {
+        playBuySound();
         coins -= speedCost;
         player.maxCooldown--;
         speedLevel++;
@@ -773,6 +903,7 @@
 
     document.getElementById('btnBuyCoinMult').addEventListener('pointerdown', () => {
       if (coins >= coinMultCost) {
+        playBuySound();
         coins -= coinMultCost;
         coinMultLevel++;
         coinMultCost = Math.floor(coinMultCost * 1.8);
@@ -785,14 +916,19 @@
         let jumpBoost = (weaponList[currentWeaponIndex].id === 2) ? -2 : 0;
         player.vy = jumpPower + jumpBoost;
         player.isJumping = true;
+        playJumpSound();
       }
     }
 
     window.addEventListener("keydown", e => {
+      initAudio();
       if (e.code === 'KeyA' || e.code === 'ArrowLeft') moveLeft = true;
       if (e.code === 'KeyD' || e.code === 'ArrowRight') moveRight = true;
       if ((e.code === 'KeyW' || e.code === 'ArrowUp') && !isShopOpen && !isAdminOpen) triggerJump();
-      if (e.code === 'Space' && !isShopOpen && !isAdminOpen) attackBuffer = 8;
+      if (e.code === 'Space' && !isShopOpen && !isAdminOpen) {
+        attackBuffer = 8;
+        playAttackSound();
+      }
       if ((e.code === 'KeyE' || e.code === 'ShiftLeft') && !isShopOpen && !isAdminOpen) triggerAbility();
     });
     window.addEventListener("keyup", e => {
@@ -808,6 +944,7 @@
       abilityCooldownTimer = Math.floor(ab.cd * cdMultiplier);
 
       let playerDamage = weaponList[currentWeaponIndex].dmg;
+      playBuySound();
 
       switch(ab.id) {
         case 0:
@@ -856,6 +993,7 @@
     function dealEnemyDamage(amount, labelText) {
       enemy.hp -= amount;
       enemy.hurtTimer = 8;
+      playHitSound();
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
@@ -865,6 +1003,7 @@
         let cashEarned = Math.floor(baseCash * totalCashMult);
         
         coins = Math.min(MAX_COINS, coins + cashEarned);
+        playCoinSound();
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
@@ -1158,6 +1297,7 @@
               if (currentWeapon.id === 1) takenDmg = Math.max(1, takenDmg - 1); 
               player.hp -= takenDmg;
               player.hurtTimer = 8;
+              playHitSound();
 
               player.x += enemy.facingRight ? 16 : -16;
               player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
@@ -1264,6 +1404,7 @@
     }
 
     document.getElementById('btnRestart').addEventListener('pointerdown', () => {
+      initAudio();
       wave = 1;
       recalculatePlayerStats();
       player.hp = player.maxHp;
