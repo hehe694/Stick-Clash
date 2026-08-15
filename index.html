@@ -288,6 +288,15 @@
         </div>
       </div>
 
+      <!-- ✨ ABILITY / SKILL SELECT -->
+      <div class="shop-item">
+        <label style="font-weight: bold; color: #fff; font-size: 14px;">✨ Set Ability (Insta-Equip):</label>
+        <div style="display: flex; gap: 8px;">
+          <select class="shop-select" id="adminAbilitySelect" style="margin:0; padding:8px; border-color: #a29bfe; color: #a29bfe;"></select>
+          <button class="btn-buy" id="btnAdminSetAbility" style="margin:0; width: auto; padding:8px 14px; background: #9b59b6; border-color: #a29bfe; color: #fff;">Equip</button>
+        </div>
+      </div>
+
       <button class="btn btn-close-shop" id="btnCloseAdmin">❌ CLOSE ADMIN</button>
     </div>
 
@@ -452,11 +461,17 @@
     });
 
     const abilitySelect = document.getElementById('abilitySelect');
+    const adminAbilitySelect = document.getElementById('adminAbilitySelect');
     abilityList.forEach((a, index) => {
       const opt = document.createElement('option');
       opt.value = index;
       opt.innerText = a.name;
       abilitySelect.appendChild(opt);
+
+      const optAdminA = document.createElement('option');
+      optAdminA.value = index;
+      optAdminA.innerText = a.name;
+      adminAbilitySelect.appendChild(optAdminA);
     });
 
     function recalculatePlayerStats() {
@@ -465,8 +480,9 @@
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
-      player.maxHp = 100 + bonusHp + waveMaxHpBonus;
-      if (player.hp > player.maxHp) player.hp = player.maxHp;
+      let calculatedMax = 100 + bonusHp + waveMaxHpBonus;
+      // Preserve custom/admin health if it's higher than the calculated base max
+      player.maxHp = Math.max(calculatedMax, player.hp);
     }
 
     function spawnNextEnemy() {
@@ -599,6 +615,13 @@
       currentWeaponIndex = idx;
       recalculatePlayerStats();
       hitsEffects.push({ x: player.x, y: player.y - 40, text: "SWORD EQUIPPED: " + weaponList[idx].name + " 🗡️🛠️", color: "#ffd700", life: 30 });
+    });
+
+    document.getElementById('btnAdminSetAbility').addEventListener('pointerdown', () => {
+      let idx = parseInt(adminAbilitySelect.value);
+      if (!unlockedAbilities.includes(idx)) unlockedAbilities.push(idx);
+      currentAbilityIndex = idx;
+      hitsEffects.push({ x: player.x, y: player.y - 40, text: "ABILITY EQUIPPED: " + abilityList[idx].name + " ✨🛠️", color: "#a29bfe", life: 30 });
     });
 
     // 🛒 SHOP LOGIC
@@ -818,13 +841,13 @@
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
-        waveMaxHpBonus += 8;
+        waveMaxHpBonus += 5; // +5 Max HP per wave
 
         recalculatePlayerStats();
-        player.hp = player.maxHp; 
+        player.hp = player.maxHp; // Full heal to max HP while preserving custom/admin health!
 
-        hitsEffects.push({ x: player.x, y: player.y - 50, text: "FULL HEAL! ❤️", color: "#2ed573", life: 40 });
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+8 MAX HP & FULL HEAL! ❤️)", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: player.x, y: player.y - 50, text: "FULL HEAL! 💖", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (MAX HP +5 & FULL HEAL! 💖)", color: "#2ed573", life: 40 });
         
         spawnNextEnemy();
       }
