@@ -260,6 +260,16 @@
         </div>
       </div>
 
+      <!-- 💰 COIN CONTROL -->
+      <div class="shop-item">
+        <label style="font-weight: bold; color: #ffd700; font-size: 14px;">💰 Coin Control:</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="number" id="adminCoinsInput" class="shop-select" value="1000" style="margin:0; padding:8px;">
+          <button class="btn-buy" id="btnAdminSetCoins" style="margin:0; width: auto; padding:8px 14px; background: #ffd700; color: #000; border-color: #ffbe76;">Set Coins</button>
+          <button class="btn-buy" id="btnAdminAddCoins" style="margin:0; width: auto; padding:8px 14px; background: #2ed573; border-color: #7bed9f;">+ Add</button>
+        </div>
+      </div>
+
       <!-- 🌊 WAVE CONTROL -->
       <div class="shop-item">
         <label style="font-weight: bold; color: #fff; font-size: 14px;">🌊 Wave Control:</label>
@@ -375,7 +385,6 @@
     const ctx = canvas.getContext("2d");
 
     let wave = 1;
-    let waveMaxHpBonus = 0; 
     let coins = 0;
     const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
@@ -480,8 +489,7 @@
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
-      let calculatedMax = 100 + bonusHp + waveMaxHpBonus;
-      // Preserve custom/admin health if it's higher than the calculated base max
+      let calculatedMax = 100 + bonusHp;
       player.maxHp = Math.max(calculatedMax, player.hp);
     }
 
@@ -552,6 +560,7 @@
         isAdminOpen = true;
         adminModal.style.display = 'flex';
         document.getElementById('adminHpInput').value = player.hp;
+        document.getElementById('adminCoinsInput').value = coins;
         document.getElementById('adminWaveInput').value = wave;
         document.getElementById('adminSpdInput').value = player.maxCooldown;
       } else if (pwd !== null) {
@@ -580,6 +589,24 @@
         player.hp += val;
         player.maxHp = Math.max(player.maxHp, player.hp);
         hitsEffects.push({ x: player.x, y: player.y - 40, text: "+" + val + " ADMIN HP! 🛠️", color: "#2ed573", life: 25 });
+      }
+    });
+
+    document.getElementById('btnAdminSetCoins').addEventListener('pointerdown', () => {
+      let val = parseInt(document.getElementById('adminCoinsInput').value);
+      if (!isNaN(val)) {
+        coins = Math.max(0, Math.min(MAX_COINS, val));
+        if (isShopOpen) updateShopUI();
+        hitsEffects.push({ x: player.x, y: player.y - 40, text: "COINS SET TO $" + coins.toLocaleString() + "! 💰🛠️", color: "#ffd700", life: 25 });
+      }
+    });
+
+    document.getElementById('btnAdminAddCoins').addEventListener('pointerdown', () => {
+      let val = parseInt(document.getElementById('adminCoinsInput').value);
+      if (!isNaN(val)) {
+        coins = Math.max(0, Math.min(MAX_COINS, coins + val));
+        if (isShopOpen) updateShopUI();
+        hitsEffects.push({ x: player.x, y: player.y - 40, text: "+" + val.toLocaleString() + " COINS! 💰🛠️", color: "#2ed573", life: 25 });
       }
     });
 
@@ -841,13 +868,8 @@
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
-        waveMaxHpBonus += 5; // +5 Max HP per wave
 
-        recalculatePlayerStats();
-        player.hp = player.maxHp; // Full heal to max HP while preserving custom/admin health!
-
-        hitsEffects.push({ x: player.x, y: player.y - 50, text: "FULL HEAL! 💖", color: "#2ed573", life: 40 });
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (MAX HP +5 & FULL HEAL! 💖)", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥", color: "#2ed573", life: 40 });
         
         spawnNextEnemy();
       }
@@ -1243,7 +1265,6 @@
 
     document.getElementById('btnRestart').addEventListener('pointerdown', () => {
       wave = 1;
-      waveMaxHpBonus = 0;
       recalculatePlayerStats();
       player.hp = player.maxHp;
       player.x = 150;
