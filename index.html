@@ -260,16 +260,6 @@
         </div>
       </div>
 
-      <!-- 💰 COIN CONTROL -->
-      <div class="shop-item">
-        <label style="font-weight: bold; color: #ffd700; font-size: 14px;">💰 Coin Control:</label>
-        <div style="display: flex; gap: 8px;">
-          <input type="number" id="adminCoinsInput" class="shop-select" value="1000" style="margin:0; padding:8px;">
-          <button class="btn-buy" id="btnAdminSetCoins" style="margin:0; width: auto; padding:8px 14px; background: #ffd700; color: #000; border-color: #ffbe76;">Set Coins</button>
-          <button class="btn-buy" id="btnAdminAddCoins" style="margin:0; width: auto; padding:8px 14px; background: #2ed573; border-color: #7bed9f;">+ Add</button>
-        </div>
-      </div>
-
       <!-- 🌊 WAVE CONTROL -->
       <div class="shop-item">
         <label style="font-weight: bold; color: #fff; font-size: 14px;">🌊 Wave Control:</label>
@@ -295,15 +285,6 @@
         <div style="display: flex; gap: 8px;">
           <select class="shop-select" id="adminWeaponSelect" style="margin:0; padding:8px;"></select>
           <button class="btn-buy" id="btnAdminSetWeapon" style="margin:0; width: auto; padding:8px 14px; background: #ffd700; color: #000; border-color: #ffbe76;">Equip</button>
-        </div>
-      </div>
-
-      <!-- ✨ ABILITY / SKILL SELECT -->
-      <div class="shop-item">
-        <label style="font-weight: bold; color: #fff; font-size: 14px;">✨ Set Ability (Insta-Equip):</label>
-        <div style="display: flex; gap: 8px;">
-          <select class="shop-select" id="adminAbilitySelect" style="margin:0; padding:8px; border-color: #a29bfe; color: #a29bfe;"></select>
-          <button class="btn-buy" id="btnAdminSetAbility" style="margin:0; width: auto; padding:8px 14px; background: #9b59b6; border-color: #a29bfe; color: #fff;">Equip</button>
         </div>
       </div>
 
@@ -381,127 +362,11 @@
   <button class="btn btn-restart" id="btnRestart">🔄 TRY AGAIN</button>
 
   <script>
-    // 🎵 AUDIO SYSTEM (WEB AUDIO API)
-    let audioCtx = null;
-    let bgmInterval = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      startBgm();
-    }
-
-    // Soft, low-volume ambient BGM loop
-    function startBgm() {
-      if (bgmInterval) return;
-      const notes = [220, 261.63, 329.63, 392.00]; // Chill A minor arpeggio
-      let step = 0;
-      
-      bgmInterval = setInterval(() => {
-        if (!audioCtx) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-        
-        // Very quiet volume so it's not too loud
-        gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start();
-        osc.stop(audioCtx.currentTime + 1.2);
-        
-        step++;
-      }, 1400);
-    }
-
-    function playJumpSound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.12);
-    }
-
-    function playAttackSound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.08);
-    }
-
-    function playHitSound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(110, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.1);
-    }
-
-    function playCoinSound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.07);
-      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.2);
-    }
-
-    function playBuySound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.15);
-    }
-
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
     let wave = 1;
+    let waveMaxHpBonus = 0; 
     let coins = 0;
     const MAX_COINS = 500000; // 🏦 MAX MONEY CAP $500,000
     let isShopOpen = false;
@@ -587,17 +452,11 @@
     });
 
     const abilitySelect = document.getElementById('abilitySelect');
-    const adminAbilitySelect = document.getElementById('adminAbilitySelect');
     abilityList.forEach((a, index) => {
       const opt = document.createElement('option');
       opt.value = index;
       opt.innerText = a.name;
       abilitySelect.appendChild(opt);
-
-      const optAdminA = document.createElement('option');
-      optAdminA.value = index;
-      optAdminA.innerText = a.name;
-      adminAbilitySelect.appendChild(optAdminA);
     });
 
     function recalculatePlayerStats() {
@@ -606,8 +465,8 @@
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
-      let calculatedMax = 100 + bonusHp;
-      player.maxHp = Math.max(calculatedMax, player.hp);
+      player.maxHp = 100 + bonusHp + waveMaxHpBonus;
+      if (player.hp > player.maxHp) player.hp = player.maxHp;
     }
 
     function spawnNextEnemy() {
@@ -628,7 +487,7 @@
 
     function bindHold(btnId, onPress, onRelease) {
       const btn = document.getElementById(btnId);
-      btn.addEventListener('pointerdown', (e) => { e.preventDefault(); initAudio(); onPress(); });
+      btn.addEventListener('pointerdown', (e) => { e.preventDefault(); onPress(); });
       btn.addEventListener('pointerup', (e) => { e.preventDefault(); onRelease(); });
       btn.addEventListener('pointerleave', (e) => { e.preventDefault(); onRelease(); });
     }
@@ -638,56 +497,31 @@
 
     document.getElementById('btnJump').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      initAudio();
       triggerJump();
     });
 
     document.getElementById('btnAttack').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      initAudio();
-      if (!isShopOpen && !isAdminOpen) {
-        attackBuffer = 8;
-        playAttackSound();
-      }
+      if (!isShopOpen && !isAdminOpen) attackBuffer = 8;
     });
 
     document.getElementById('btnSkill').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      initAudio();
       if (!isShopOpen && !isAdminOpen) triggerAbility();
     });
 
-    // 🔐 ENCRYPTION HELPER (Caesar +3 -> Base64 -> Base64)
-    function encryptPassword(str) {
-      let caesar = "";
-      for (let i = 0; i < str.length; i++) {
-        let c = str[i];
-        if (c >= 'a' && c <= 'z') {
-          caesar += String.fromCharCode((c.charCodeAt(0) - 97 + 3) % 26 + 97);
-        } else if (c >= 'A' && c <= 'Z') {
-          caesar += String.fromCharCode((c.charCodeAt(0) - 65 + 3) % 26 + 65);
-        } else {
-          caesar += c;
-        }
-      }
-      return btoa(btoa(caesar));
-    }
-
-    // ⚙️ ADMIN PANEL LOGIC (Double Encrypted Hash Check)
+    // ⚙️ ADMIN PANEL LOGIC (PASSWORD UPDATED HERE)
     const adminModal = document.getElementById('adminModal');
 
     document.getElementById('btnAdmin').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      initAudio();
       let pwd = prompt("🔐 Enter Admin Password:");
-      if (pwd !== null && encryptPassword(pwd) === "Umt0SVNGWklTbGhDTFVSc1oyaHg=") {
+      if (pwd === "CHEESEGUY-Aiden") {
         isAdminOpen = true;
         adminModal.style.display = 'flex';
         document.getElementById('adminHpInput').value = player.hp;
-        document.getElementById('adminCoinsInput').value = coins;
         document.getElementById('adminWaveInput').value = wave;
         document.getElementById('adminSpdInput').value = player.maxCooldown;
-        playBuySound();
       } else if (pwd !== null) {
         alert("❌ Incorrect Password! Nice try, hacker! 🧀");
       }
@@ -714,24 +548,6 @@
         player.hp += val;
         player.maxHp = Math.max(player.maxHp, player.hp);
         hitsEffects.push({ x: player.x, y: player.y - 40, text: "+" + val + " ADMIN HP! 🛠️", color: "#2ed573", life: 25 });
-      }
-    });
-
-    document.getElementById('btnAdminSetCoins').addEventListener('pointerdown', () => {
-      let val = parseInt(document.getElementById('adminCoinsInput').value);
-      if (!isNaN(val)) {
-        coins = Math.max(0, Math.min(MAX_COINS, val));
-        if (isShopOpen) updateShopUI();
-        hitsEffects.push({ x: player.x, y: player.y - 40, text: "COINS SET TO $" + coins.toLocaleString() + "! 💰🛠️", color: "#ffd700", life: 25 });
-      }
-    });
-
-    document.getElementById('btnAdminAddCoins').addEventListener('pointerdown', () => {
-      let val = parseInt(document.getElementById('adminCoinsInput').value);
-      if (!isNaN(val)) {
-        coins = Math.max(0, Math.min(MAX_COINS, coins + val));
-        if (isShopOpen) updateShopUI();
-        hitsEffects.push({ x: player.x, y: player.y - 40, text: "+" + val.toLocaleString() + " COINS! 💰🛠️", color: "#2ed573", life: 25 });
       }
     });
 
@@ -767,13 +583,6 @@
       currentWeaponIndex = idx;
       recalculatePlayerStats();
       hitsEffects.push({ x: player.x, y: player.y - 40, text: "SWORD EQUIPPED: " + weaponList[idx].name + " 🗡️🛠️", color: "#ffd700", life: 30 });
-    });
-
-    document.getElementById('btnAdminSetAbility').addEventListener('pointerdown', () => {
-      let idx = parseInt(adminAbilitySelect.value);
-      if (!unlockedAbilities.includes(idx)) unlockedAbilities.push(idx);
-      currentAbilityIndex = idx;
-      hitsEffects.push({ x: player.x, y: player.y - 40, text: "ABILITY EQUIPPED: " + abilityList[idx].name + " ✨🛠️", color: "#a29bfe", life: 30 });
     });
 
     // 🛒 SHOP LOGIC
@@ -847,7 +656,6 @@
     abilitySelect.addEventListener('change', updateShopUI);
 
     document.getElementById('btnBuyWeapon').addEventListener('pointerdown', () => {
-      playBuySound();
       const idx = parseInt(weaponSelect.value);
       const w = weaponList[idx];
       if (unlockedWeapons.includes(idx)) {
@@ -862,7 +670,6 @@
     });
 
     document.getElementById('btnBuyAbility').addEventListener('pointerdown', () => {
-      playBuySound();
       const idx = parseInt(abilitySelect.value);
       const a = abilityList[idx];
       if (unlockedAbilities.includes(idx)) {
@@ -877,8 +684,6 @@
 
     document.getElementById('btnShop').addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      initAudio();
-      playBuySound();
       isShopOpen = true;
       updateShopUI();
       shopModal.style.display = 'flex';
@@ -892,7 +697,6 @@
 
     document.getElementById('btnBuySpd').addEventListener('pointerdown', () => {
       if (coins >= speedCost && player.maxCooldown > 8) {
-        playBuySound();
         coins -= speedCost;
         player.maxCooldown--;
         speedLevel++;
@@ -903,7 +707,6 @@
 
     document.getElementById('btnBuyCoinMult').addEventListener('pointerdown', () => {
       if (coins >= coinMultCost) {
-        playBuySound();
         coins -= coinMultCost;
         coinMultLevel++;
         coinMultCost = Math.floor(coinMultCost * 1.8);
@@ -916,19 +719,14 @@
         let jumpBoost = (weaponList[currentWeaponIndex].id === 2) ? -2 : 0;
         player.vy = jumpPower + jumpBoost;
         player.isJumping = true;
-        playJumpSound();
       }
     }
 
     window.addEventListener("keydown", e => {
-      initAudio();
       if (e.code === 'KeyA' || e.code === 'ArrowLeft') moveLeft = true;
       if (e.code === 'KeyD' || e.code === 'ArrowRight') moveRight = true;
       if ((e.code === 'KeyW' || e.code === 'ArrowUp') && !isShopOpen && !isAdminOpen) triggerJump();
-      if (e.code === 'Space' && !isShopOpen && !isAdminOpen) {
-        attackBuffer = 8;
-        playAttackSound();
-      }
+      if (e.code === 'Space' && !isShopOpen && !isAdminOpen) attackBuffer = 8;
       if ((e.code === 'KeyE' || e.code === 'ShiftLeft') && !isShopOpen && !isAdminOpen) triggerAbility();
     });
     window.addEventListener("keyup", e => {
@@ -944,7 +742,6 @@
       abilityCooldownTimer = Math.floor(ab.cd * cdMultiplier);
 
       let playerDamage = weaponList[currentWeaponIndex].dmg;
-      playBuySound();
 
       switch(ab.id) {
         case 0:
@@ -993,7 +790,6 @@
     function dealEnemyDamage(amount, labelText) {
       enemy.hp -= amount;
       enemy.hurtTimer = 8;
-      playHitSound();
       hitsEffects.push({ x: enemy.x, y: enemy.y - 30, text: labelText + " (-" + Math.floor(amount) + ")", color: "#e17055", life: 20 });
 
       if (enemy.hp <= 0) {
@@ -1003,12 +799,16 @@
         let cashEarned = Math.floor(baseCash * totalCashMult);
         
         coins = Math.min(MAX_COINS, coins + cashEarned);
-        playCoinSound();
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
         wave++;
+        waveMaxHpBonus += 8;
 
-        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥", color: "#2ed573", life: 40 });
+        recalculatePlayerStats();
+        player.hp = player.maxHp; 
+
+        hitsEffects.push({ x: player.x, y: player.y - 50, text: "FULL HEAL! ❤️", color: "#2ed573", life: 40 });
+        hitsEffects.push({ x: canvas.width / 2, y: 150, text: "WAVE " + wave + "! 🔥 (+8 MAX HP & FULL HEAL! ❤️)", color: "#2ed573", life: 40 });
         
         spawnNextEnemy();
       }
@@ -1297,7 +1097,6 @@
               if (currentWeapon.id === 1) takenDmg = Math.max(1, takenDmg - 1); 
               player.hp -= takenDmg;
               player.hurtTimer = 8;
-              playHitSound();
 
               player.x += enemy.facingRight ? 16 : -16;
               player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
@@ -1404,8 +1203,8 @@
     }
 
     document.getElementById('btnRestart').addEventListener('pointerdown', () => {
-      initAudio();
       wave = 1;
+      waveMaxHpBonus = 0;
       recalculatePlayerStats();
       player.hp = player.maxHp;
       player.x = 150;
