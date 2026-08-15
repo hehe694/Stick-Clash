@@ -607,14 +607,14 @@
       adminAbilitySelect.appendChild(optAdminA);
     });
 
-    // 🧀 RECALCULATE MAX HEALTH (+6 HP PER WAVE + SHOP UPGRADES)
+    // 🧀 RECALCULATE MAX HEALTH (+6 HP PER WAVE STARTING AT WAVE 1 + SHOP UPGRADES)
     function recalculatePlayerStats() {
       let currentWeapon = weaponList[currentWeaponIndex];
       let bonusHp = 0;
       if (currentWeapon.id === 0) bonusHp = 10;
       if (currentWeapon.id === 9) bonusHp = 30;
 
-      let waveBonusHp = (wave - 1) * 6;       // 🧀 +6 Max HP every wave!
+      let waveBonusHp = wave * 6;              // 🧀 Wave 1 = +6 HP, Wave 2 = +12 HP, Wave 3 = +18 HP!
       let shopBonusHp = (maxHpLevel - 1) * 15; // Shop Max HP upgrades
 
       player.maxHp = 100 + bonusHp + waveBonusHp + shopBonusHp;
@@ -917,7 +917,7 @@
         maxHpLevel++;
         maxHpCost = Math.floor(maxHpCost * 1.8);
         recalculatePlayerStats();
-        player.hp = Math.min(player.maxHp, player.hp + 15); // Heal the bonus HP instantly
+        player.hp = Math.min(player.maxHp, player.hp + 15);
         updateShopUI();
       }
     });
@@ -1036,7 +1036,7 @@
         
         coins = Math.min(MAX_COINS, coins + cashEarned);
         playCoinSound();
-        playBuySound(); // 🧀 Audio confirmation for round clear / heal!
+        playBuySound();
 
         hitsEffects.push({ x: enemy.x, y: enemy.y - 60, text: "+$" + cashEarned + " 💰 (" + totalCashMult.toFixed(1) + "x)", color: "#ffd700", life: 30 });
 
